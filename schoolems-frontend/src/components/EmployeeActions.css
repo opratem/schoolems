@@ -1,0 +1,19 @@
+.employee-actions {
+  display: inline-block;
+  margin-left: 1rem;
+}
+
+.admin-action {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.9rem;
+}
+
+.admin-action:hover {
+  background-color: #c82333;
+}

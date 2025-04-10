@@ -1,0 +1,28 @@
+/* Route Transition Animations */
+.route-container{
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Admin Access Warning Styles */
+.admin-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 4px;
+    border: 1px solid #ffeeba;
+    text-align: center;
+    animation: shake 0.5s
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
+}
+
