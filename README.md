@@ -7,7 +7,7 @@
 
 ## 📋 Project Overview
 
-**SchoolEMS** is a full-stack web application developed to streamline the management of school employee records and leave requests. It provides a centralized platform for administrators, HR personnel, and staff to efficiently manage and track employee data. This project was developed during my internship at **FlexiSAF** as a practical demonstration of full-stack development skills.
+**SchoolEMS** is a full-stack web application developed to streamline the management of school employee records and leave requests. It provides a centralized platform for administrators, HR personnel, and staff to efficiently manage and track employee data.
 
 ---
 
