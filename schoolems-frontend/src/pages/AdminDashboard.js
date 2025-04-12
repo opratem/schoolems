@@ -11,12 +11,16 @@ function AdminDashboard() {
   }, []);
 
   return (
-    <div>
-      <h1>Admin Dashboard</h1>
+    <div className="container mt-4">
+      <h1 className="mb-4">Admin Dashboard</h1>
       {isUserAdmin ? (
-        <div>Welcome, Admin! Here are your admin controls...</div>
+        <div className="alert alert-success">
+        Welcome, Admin! Here are your admin controls...
+        </div>
       ) : (
-        <div>You don't have permission to view this page.</div>
+        <div className="alert alert-danger">
+        You dont have permission to view this page.
+        </div>
       )}
     </div>
   );

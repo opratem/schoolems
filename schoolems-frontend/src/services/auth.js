@@ -1,14 +1,18 @@
-import { api } from './api'; // Import your axios instance
+import api from './api';
+import { getDevelopmentRole, setToken, removeToken, getToken } from '../utils/token';
 
-// Dev Role Switcher (for testing) - Only in development
-const getDevelopmentRole = () => {
-  if (process.env.NODE_ENV === 'development') {
-    return localStorage.getItem('userRole');
-  }
-  return null;
+export const login = async (credentials) => {
+  const res = await api.post('/auth/login', credentials);
+  const token = res.data.token;
+  setToken(token);
+  return token;
 };
 
-// Fetch REAL role from backend
+export const register = async (data) => {
+  const res = await api.post('/auth/register', data);
+  return res.data;
+};
+
 export async function getCurrentUserRole() {
   const devRole = getDevelopmentRole();
   if (devRole) return devRole;
@@ -22,33 +26,29 @@ export async function getCurrentUserRole() {
     console.error('Error fetching user role:', error);
     return null;
   }
-}
+};
 
-export async function isAdmin() {
+export const isAdmin= async()  => {
   const role = await getCurrentUserRole();
-  return role === 'ADMIN';
+  return role?.toUpperCase() === 'ADMIN';
 }
 
-export async function logout() {
-  try {
-    const token = localStorage.getItem('token');
+export const logout = async () => {
+    const token = getToken();
 
+  try {
+    if (token) {
+    await api.post('/auth/logout', null, {
+        headers: { Authorization: `Bearer ${token}` },
+    });
+   }
+  } catch (error){
+    console.warn('Backend logout failed. Proceeding with frontend cleanup.');
+  }
+    removeToken();
     // Clear frontend storage
-    localStorage.removeItem('token');
     localStorage.removeItem('role');
     localStorage.removeItem('userRole');
 
-    // Call backend logout if token exists
-    if (token) {
-      await api.post('/auth/logout', null, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-    }
-  } catch (error) {
-    console.error('Logout error (proceeding anyway):', error);
-    // Continue with frontend cleanup even if backend logout fails
-  }
-  window.location.href = '/login'; // Redirect to login page
-}
+    window.location.href = '/login'; // Redirect to login page
+};

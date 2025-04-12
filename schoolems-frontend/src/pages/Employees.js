@@ -31,12 +31,21 @@ function Employees() {
     };
 
     return (
-        <div>
-            <h1>Employees</h1>
-            <ul>
+        <div className="container mt-4">
+            <h1 className="mb-4">Employees</h1>
+           {employees.length === 0 ? (
+             <div className="alert alert-info">No employees found.</div>
+           ) : (
+             <ul className="list-group">
                 {employees.map((emp) => (
-                    <li key={emp.id}>
-                        {emp.name} - {emp.department} - Role: {emp.role}
+                    <li
+                        key={emp.id}
+                        className="list-group-item d-flex justify-content-between align-items-center"
+                     >
+                        <div>
+                            <strong>{emp.name}</strong> <br />
+                             <span className="text-muted">{emp.department}</span> - Role: {emp.role}
+                        </div>
                         <EmployeeActions
                             employeeId={emp.id}
                             onDelete={handleDeleteEmployee}
@@ -45,6 +54,7 @@ function Employees() {
                     </li>
                 ))}
             </ul>
+           )}
         </div>
     );
 }

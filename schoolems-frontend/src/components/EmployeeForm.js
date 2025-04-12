@@ -86,74 +86,76 @@ const EmployeeForm = ({ isEdit = false }) => {
         }
     };
 
-    if (isLoading) return <div>Loading employee data...</div>;
+    if (isLoading) return <div className="text-center mt-5">Loading employee data...</div>;
 
     return (
-        <div className="employee-form">
-            <h2>{isEdit ? 'Edit Employee' : 'Add New Employee'}</h2>
+        <div className="container mt-5">
+            <h2 className="mb-4">{isEdit ? 'Edit Employee' : 'Add New Employee'}</h2>
             {!userIsAdmin && isEdit && (
-                <div className="warning">You need admin privileges to edit employees</div>
+                <div className="alert alert-warning">
+                You need admin privileges to edit employees
+                </div>
             )}
             <form onSubmit={handleSubmit}>
                 {/* Name Field */}
-                <div className="form-group">
-                    <label>Full Name *</label>
+                <div className="mb-3">
+                    <label className="form-label">Full Name *</label>
                     <input
                         type="text"
                         name="name"
                         value={formData.name}
                         onChange={handleChange}
-                        className={errors.name ? 'error' : ''}
+                        className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                         placeholder="John Doe"
                     />
-                    {errors.name && <span className="error-message">{errors.name}</span>}
+                    {errors.name && <div className="invalid-feedback">{errors.name}</div>}
                 </div>
 
                 {/* Email Field */}
-                <div className="form-group">
-                    <label>Email *</label>
+                <div className="mb-3">
+                    <label className="form-label">Email *</label>
                     <input
                         type="email"
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
-                        className={errors.email ? 'error' : ''}
+                        className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                         placeholder="john@example.com"
                     />
-                    {errors.email && <span className="error-message">{errors.email}</span>}
+                    {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                 </div>
 
                 {/* Department Field */}
-                <div className="form-group">
-                    <label>Department *</label>
+                <div className="mb-3">
+                    <label className="form-label">Department *</label>
                     <input
                         type="text"
                         name="department"
                         value={formData.department}
                         onChange={handleChange}
-                        className={errors.department ? 'error' : ''}
-                        placeholder="E.g., IT, Mathematics, Administration"
+                        className={`form-control ${errors.department ? 'is-invalid' : ''}`}
+                        placeholder="e.g., IT, Mathematics, Administration"
                     />
-                    {errors.department && <span className="error-message">{errors.department}</span>}
+                    {errors.department && <div className="invalid-feedback">{errors.department}</div>}
                 </div>
 
                 {/* Position Field */}
-                <div className="form-group">
-                    <label>Position *</label>
+                <div className="mb-3">
+                    <label className="form-label">Position *</label>
                     <input
                         type="text"
                         name="position"
                         value={formData.position}
                         onChange={handleChange}
-                        className={errors.position ? 'error' : ''}
-                        placeholder="E.g., Teacher, Secretary, Accountant"
+                        className={`form-control ${errors.position ? 'is-invalid' : ''}`}
+                        placeholder="e.g., Teacher, Secretary, Accountant"
                     />
-                    {errors.position && <span className="error-message">{errors.position}</span>}
+                    {errors.position && <div className="invalid-feedback">{errors.position}</div>}
                 </div>
 
                 {/* Phone Field */}
-                <div className="form-group">
-                    <label>Phone</label>
+                <div className="mb-3">
+                    <label className="form-label">Phone</label>
                     <input
                         type="tel"
                         name="phone"
@@ -164,19 +166,21 @@ const EmployeeForm = ({ isEdit = false }) => {
                 </div>
 
                 {/* Start Date */}
-                <div className="form-group">
-                    <label>Start Date</label>
+                <div className="mb-4">
+                    <label className="form-label">Start Date</label>
                     <input
                         type="date"
                         name="startDate"
                         value={formData.startDate || ''}
                         onChange={handleChange}
+                        className="form-control"
                     />
                 </div>
 
                 {/* Submit Button */}
                 <button
                     type="submit"
+                    className="btn btn-success"
                     disabled={isSubmitting || (isEdit && !userIsAdmin)}
                 >
                     {isSubmitting ? 'Saving...' : 'Save Employee'}

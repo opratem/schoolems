@@ -1,29 +1,22 @@
-import axios from "axios";
+// services/api.js
+import axios from 'axios';
+import { getToken } from '../utils/token';
 
-const API_URL = "http://localhost:8080/api";
-
-// Create an axios instance with base URL
-export const api = axios.create({
-  baseURL: API_URL
+// Create Axios instance
+const api = axios.create({
+  baseURL: 'http://localhost:8080/api',
 });
 
-// Add JWT token to requests using instance
-api.interceptors.request.use((config) => {
-  config.headers['Content-Type'] = 'application/json';
-  const token = localStorage.getItem("token");
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
-
-api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    if (error.response?.status === 401) {
-      // Handle unauthorized errors (e.g., redirect to login)
-      window.location.href = '/login';
+// Add a request interceptor to inject token
+api.interceptors.request.use(
+  (config) => {
+    const token = getToken();
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
     }
+    return config;
+  },
+  (error) => {
     return Promise.reject(error);
   }
 );
@@ -88,3 +81,5 @@ export const deleteEmployee = async (id) => {
     throw error;
   }
 };
+
+export default api;

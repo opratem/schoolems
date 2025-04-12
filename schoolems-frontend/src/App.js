@@ -1,15 +1,22 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Employees from "./pages/Employees";
 import EmployeeForm from "./components/EmployeeForm";
-import ProtectedRoute from "./components/ProtectedRoute";
 import Navbar from "./components/Navbar";
-import AdminRoute from './components/AdminRoute';
-import { React } from 'react';
+import React from 'react';
 import DevRoleSwitcher from './components/DevRoleSwitcher';
 import AdminDashboard from './pages/AdminDashboard';
+import { useAuth } from './hooks/useAuth';
+import RoleRoute from './components/RoleRoute';
+import Unauthorized from "./pages/Unauthorized";
+import Spinner from './components/Spinner';
+import Register from './pages/Register';
 
 function App() {
+    const { role, loading } = useAuth();
+
+    if(loading) return <Spinner />;
+
     return (
         <div className="App">
         <BrowserRouter>
@@ -17,47 +24,51 @@ function App() {
             <Routes>
                 {/* Default path redirects to Login */}
                 <Route path="/" element={<Login />} />
+                <Route path='/login' element={<Login />} />
+                <Route path="/register" element={<Register />} />
 
                 {/*Protected route for employees (requires JWT token) */}
                 <Route
                     path = "/employees"
                     element={
-                        <ProtectedRoute>
+                        <RoleRoute requiredRole ="employee">
                             <Employees/>
-                        </ProtectedRoute>
+                        </RoleRoute>
                     }
                 />
 
                 <Route
                  path="/employees/add"
                  element={
-                    <ProtectedRoute>
-                        <EmployeeForm/>
-                    </ProtectedRoute>
+                    <RoleRoute requiredRole ="employee">
+                         <Employees/>
+                    </RoleRoute>
                 }
                 />
 
                 <Route
                     path="/employees/edit/:id"
                     element={
-                        <ProtectedRoute>
+                        <RoleRoute requiredRole="employee">
                             <EmployeeForm isEdit={true} />
-                        </ProtectedRoute>
+                        </RoleRoute>
                     }
                 />
 
                 <Route
                     path= "/admin-dashboard"
                     element= {
-                        <AdminRoute>
+                        <RoleRoute requiredRole="admin">
                             <div className= "route-container">
                                 <AdminDashboard />
                             </div>
-                        </AdminRoute>
+                        </RoleRoute>
                     }
                 />
+                <Route path = "/unauthorized" element ={<Unauthorized />} />
             </Routes>
         </BrowserRouter>
+
         {process.env.NODE_ENV === 'development' && <DevRoleSwitcher/>}
     </div>
     );

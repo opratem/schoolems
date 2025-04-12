@@ -1,33 +1,52 @@
-// src/components/Navbar.js
+import React from 'react';
 import { Link, useLocation } from "react-router-dom";
-import { getCurrentUserRole, logout } from "../services/auth";
-import { useEffect, useState } from 'react';
+import { useAuth } from '../hooks/useAuth';
+import { getToken, removeToken } from '../utils/token';
+import { useNavigate } from 'react-router-dom';
 
-function Navbar() {
-  const [role, setRole] = useState(null);
+const Navbar = () => {
+    const navigate = useNavigate();
+    const { role, loading } = useAuth();
+    const token = getToken();
 
-  useEffect(() => {
-    (async () => {
-      setRole(await getCurrentUserRole());
-    })();
-  }, []);
+    const handleLogout = () => {
+        removeToken();
+        navigate('/');
+        window.location.reload();
+    };
 
-  const handleLogout = () => {
-    logout();
-    window.location.href = '/';
-  };
+    if (loading) return null;
 
-  return (
-    <nav className="navbar">
-      <div className="nav-links">
-        <Link to="/employees">Employees</Link>
-        {role === 'ADMIN' && <Link to="/employees/new">Add Employee</Link>}
-      </div>
-      <button onClick={handleLogout} className="logout-btn">
-        Logout
-      </button>
+    return(
+        <nav className="navbar">
+           <div className="nav-links">
+
+           {/* Always show Home/Login */}
+           {!token && (
+             <Link to="/">Login</Link>
+           )}
+
+           {/* Employee routes */}
+           {token && role === 'employee' && (
+            <>
+                <Link to="/employees">Employees</Link>
+                <Link to="/employees/add">Add Employee</Link>
+            </>
+        )}
+            {/* Admin routes */}
+            {token && role ==='admin' && (
+                <Link to="/admin-dashboard">Admin Dashboard</Link>
+            )}
+
+            {/* Logout shown only when logged in */}
+            {token && (
+                <button onClick={handleLogout} className="admin-action">
+                    Logout
+                </button>
+            )}
+        </div>
     </nav>
-  );
-}
+    );
+};
 
 export default Navbar;

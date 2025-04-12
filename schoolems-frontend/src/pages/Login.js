@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { login } from '../services/api';
-import { useNavigate } from 'react-router-dom';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { setToken } from '../utils/token';
 
 function Login() {
     const [email, setEmail] = useState('');
@@ -13,9 +13,12 @@ function Login() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
+        setError('');
+
         try{
             const token = await login(email, password);
-            localStorage.setItem('token', token); //Store token
+            setToken(token) //Store token
             navigate('/employees');//Redirect to employee list
         } catch(error){
          setError("Login failed. Please check your credentials");
@@ -25,32 +28,57 @@ function Login() {
     };
 
     return(
-        <div>
+        <div className="container mt-5" style={{ maxWidth: '500px' }}>
+        <h2 className="text-center mb-4">Login</h2>
+
+        {error && <div className="alert alert-danger">{error}</div>}
+
           <form onSubmit={handleSubmit}>
+            {/*Email*/}
+          <div className="mb-3">
+            <label className="form-label">Email address</label>
            <input
              type= "email"
              value={email}
              onChange={(e) => setEmail(e.target.value)}
-             placeholder= "Email"
+             className="form-control"
+             placeholder= "Enter Email"
              required
-        />
+            />
+          </div>
+
+          {/* Password */}
+          <div className="mb-3">
+            <label className="form-label">Password</label>
+            <div className= "input-group">
            <input
-              //type = {showPassword ? "text" : "password"}
-              type= "password"
+              type = {showPassword ? "text" : "password"}
               value= {password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Password"
-              required
+              className="form-control"
+              placeholder="Enter password"
               autoComplete="current-password"
+              required
            />
-           {error && <p style={{ color: 'red'}}>{error}</p>} {
-           }
-            <button type="button" onClick={() => setShowPassword(!showPassword)}>
+           <button
+            type="button"
+            onClick={() => setShowPassword(!showPassword)}
+            className="btn btn-outline-secondary"
+           >
                 {showPassword ? 'Hide' : 'Show'}
             </button>
-            <button type="submit" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
+          </div>
+        </div>
+
+        {/*Submit */}
+          <div className="d-grid mb-3">
+            <button type="submit" className="btn btn-primary" disabled={loading}>
+                {loading ? 'Logging in...' : 'Login'}
+            </button>
+          </div>
         </form>
-        <p>
+
+        <p className="text-center">
             Dont have an account? <Link to="/register">Register here</Link>
         </p>
       </div>

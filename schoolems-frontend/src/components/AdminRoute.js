@@ -1,20 +1,16 @@
 import {  Navigate  }  from  "react-router-dom";
-import  {  getCurrentUserRole  }  from  "../services/auth";
-import  {  useEffect,  useState  }  from  'react';
+import  {  getToken  }  from  '../utils/token';
+import  {  useAuth  }  from  '..hooks/useAuth';
 
-function  AdminRoute({  children  })  {
-  const  [role,  setRole]  =  useState(null);
-  const  [loading,  setLoading]  =  useState(true);
+const AdminRoute = ({  children  }) => {
+  const token  =  getToken();
+  const role  =  useAuth();
 
-  useEffect(()  =>  {
-    (async  ()  =>  {
-      setRole(await  getCurrentUserRole());
-      setLoading(false);
-    })();
-  },  []);
+  if (!token) return <Navigate to="/" replace />;
+  if (!role) return null;
+  if (role !== 'admin' && role !== 'ADMIN') return <Navigate to ="/employees" replace />;
 
-  if  (loading)  return  null;  //  Or  a  loading  spinner
-  return  role  ===  'ADMIN'  ?  children  :  <Navigate  to="/employees"  replace  />;
-}
+  return children;
+};
 
 export  default  AdminRoute;
