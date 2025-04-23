@@ -2,53 +2,48 @@ import api from './api';
 import { getDevelopmentRole, setToken, removeToken, getToken } from '../utils/token';
 
 export const login = async (credentials) => {
-  const res = await api.post('/auth/login', credentials);
-  const token = res.data.token;
+  const response = await api.post('/auth/login', credentials);
+  const { token, role } = response.data;
   setToken(token);
-  return token;
+  localStorage.setItem('role', role);
+  return { token, role };
 };
 
 export const register = async (data) => {
-  const res = await api.post('/auth/register', data);
-  return res.data;
+ return await api.post('/auth/register', data);
 };
 
-export async function getCurrentUserRole() {
-  const devRole = getDevelopmentRole();
-  if (devRole) return devRole;
-
+export const getCurrentUserRole = async () => {
   try {
     const response = await api.get('/auth/me'); // Using the axios instance
-    const userData = response.data;
-    localStorage.setItem('role', userData.role);
-    return userData.role;
+    const role = response.data.role?.toUpperCase();
+    localStorage.setItem('role', role);
+    return role;
   } catch (error) {
     console.error('Error fetching user role:', error);
+    removeToken();
     return null;
   }
 };
 
 export const isAdmin= async()  => {
   const role = await getCurrentUserRole();
-  return role?.toUpperCase() === 'ADMIN';
-}
+  return role === 'ADMIN';
+};
+
+export const isManager = async () => {
+    const role = await getCurrentUserRole();
+    return role === 'MANAGER';
+};
 
 export const logout = async () => {
-    const token = getToken();
-
   try {
-    if (token) {
-    await api.post('/auth/logout', null, {
-        headers: { Authorization: `Bearer ${token}` },
-    });
-   }
-  } catch (error){
-    console.warn('Backend logout failed. Proceeding with frontend cleanup.');
-  }
+    await api.post('/auth/logout')
+  } catch (error) {
+    console.warn('Logout failed:', error);
+  } finally{
     removeToken();
-    // Clear frontend storage
     localStorage.removeItem('role');
-    localStorage.removeItem('userRole');
-
     window.location.href = '/login'; // Redirect to login page
+    }
 };

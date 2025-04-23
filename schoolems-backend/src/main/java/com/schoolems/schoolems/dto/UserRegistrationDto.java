@@ -15,7 +15,7 @@ public class UserRegistrationDto {
     private String email;
     private String password;
     private String department;
-    private String role; // Properly defined role field
+    private String role;
 
     // Custom password validation
     public void setPassword(String password) {

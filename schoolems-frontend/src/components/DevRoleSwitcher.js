@@ -2,18 +2,24 @@
 import React from 'react';
 
 function DevRoleSwitcher() {
-  const switchRole = (role) => {
-    localStorage.setItem('userRole', role); // Match your auth system's role key
-    window.location.reload();
-  };
+    const switchRole = (role) => {
+        localStorage.setItem('userRole', role); // Must match your dev-only auth mock
+        window.location.reload();
+    };
 
-  return (
-    <div className="dev-role-switcher">
-      <button onClick={() => switchRole('EMPLOYEE')}>Set as Employee</button>
-      <button onClick={() => switchRole('ADMIN')}>Set as Admin</button>
-      <button onClick={() => localStorage.clear()}>Clear Role</button>
-    </div>
-  );
+    return (
+        <div className="dev-role-switcher d-flex gap-2 my-3">
+            <button className="btn btn-outline-secondary" onClick={() => switchRole('EMPLOYEE')}>
+                Set as Employee
+            </button>
+            <button className="btn btn-outline-secondary" onClick={() => switchRole('ADMIN')}>
+                Set as Admin
+            </button>
+            <button className="btn btn-outline-danger" onClick={() => localStorage.clear()}>
+                Clear Role
+            </button>
+        </div>
+    );
 }
 
 export default DevRoleSwitcher;

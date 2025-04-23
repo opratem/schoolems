@@ -49,7 +49,7 @@ class AuthIntegrationTest {
                         .content(objectMapper.writeValueAsString(dto)))
                 .andExpect(status().isOk());
 
-        AuthRequest loginRequest = new AuthRequest("John Doe", "john@example.com", "password123", "EMPLOYEE");
+        AuthRequest loginRequest = new AuthRequest("John Doe", "john@example.com", "password123", "IT", "EMPLOYEE");
 
         mockMvc.perform(post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)

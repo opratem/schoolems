@@ -17,15 +17,15 @@ import jakarta.servlet.http.HttpServletRequest;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    @Autowired
-    private AuthService authService;
 
-    @Autowired
-    private UserRepository userRepository;
+private final AuthService authService;
+private final UserRepository userRepository;
 
-    @Autowired
-    public AuthController(AuthService authService){
+
+    public AuthController(AuthService authService, UserRepository userRepository){
+
         this.authService = authService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/register")

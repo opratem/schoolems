@@ -8,8 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthRequest {
-    private String name; //Only for registration
+    private String name;
     private String email;
     private String password;
+    private String department;
     private String role; // "ADMIN", "MANAGER", "EMPLOYEE"
 }

@@ -42,6 +42,12 @@ public class SecurityConfig {
                     config.setAllowCredentials(true);
                     return config;
                 }))
+                .sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                            response.getWriter().write("Authentication failed: " + authException.getMessage());
+                        }))
                 .authorizeHttpRequests(auth -> auth
                         // ✅ Explicitly allow these public endpoints
                         .requestMatchers("/api/auth/login", "/api/auth/register").permitAll()
@@ -49,15 +55,10 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/employees/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/employees/**").hasRole("MANAGER")
                         .requestMatchers(HttpMethod.DELETE, "/api/employees/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/api/leave").hasRole("EMPLOYEE")
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(ex -> ex
-                        .authenticationEntryPoint((request, response, authException) -> {
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            response.getWriter().write("Authentication failed: " + authException.getMessage());
-                        })
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(tokenInvalidationFilter, JwtAuthenticationFilter.class);
 

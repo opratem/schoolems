@@ -26,6 +26,7 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private String password;
+    private String department;
     private String role; //ADMIN, MANAGER, EMPLOYEE
 
     //Spring Security required methods

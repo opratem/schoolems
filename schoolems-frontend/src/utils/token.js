@@ -1,25 +1,27 @@
+const TOKEN_KEY ='token';
+const ROLE_KEY = 'userRole';
+
+const isBrowser = typeof window !== 'undefined';
+
 export const getToken = () => {
-    return localStorage.getItem('token');
+    return isBrowser ? localStorage.getItem(TOKEN_KEY) : null;
 };
 
 export const setToken = (token) => {
-    localStorage.setItem('token', token);
+    if (isBrowser) localStorage.setItem(TOKEN_KEY, token);
 };
 
 export const removeToken = () => {
-    localStorage.removeItem('token');
+    if (isBrowser) localStorage.removeItem(TOKEN_KEY);
 };
 
 export const setDevelopmentRole = (role) => {
-    if (process.env.NODE_ENV === 'development') {
-        localStorage.setItem('userRole, role');
+    if (isBrowser && process.env.NODE_ENV === 'development') {
+        localStorage.setItem(ROLE_KEY, role);
     }
 };
 
 export const getDevelopmentRole = () => {
-
-if (process.env.NODE_ENV !== 'development') return null;
-
-const role =localStorage.getItem('userRole');
-return role || null;
+    if (isBrowser || process.env.NODE_ENV !== 'development') return null;
+    return localStorage.getItem(ROLE_KEY) || null;
 };

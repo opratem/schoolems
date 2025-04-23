@@ -1,13 +1,16 @@
 package com.schoolems.schoolems.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDate;
 
 
 @Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "leave_requests")
 public class LeaveRequest {
     @Id
@@ -17,10 +20,17 @@ public class LeaveRequest {
     @ManyToOne
     @JoinColumn(name = "employee_id")
     private Employee employee;
-
     private String type; // SICK, VACATION
     private LocalDate startDate;
     private LocalDate endDate;
     private String reason;
-    private String status; // PENDING, APPROVED, REJECTED
+
+    @Enumerated(EnumType.STRING)
+    private LeaveStatus status;
+
+    public enum LeaveStatus {
+        PENDING,
+        APPROVED,
+        DENIED
+    }
 }
