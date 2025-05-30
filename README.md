@@ -60,5 +60,5 @@ Edit
 
 ### Clone the Repo
 ```bash
-git clone https://github.com/your-username/school-employee-management.git
-cd school-employee-management
+git clone https://github.com/opratem/schoolems.git
+cd schoolems
