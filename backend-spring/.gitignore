@@ -1,6 +1,7 @@
 # === GENERAL ===
 .env                     # Never commit environment secrets
 *.log                   # Ignore log files
+*.jar
 .DS_Store               # macOS system file
 Thumbs.db               # Windows system file
 
