@@ -12,9 +12,6 @@ school-employee-management/
 ├── README.md # Project overview (this file)
 ├── .gitignore
 
-yaml
-Copy
-Edit
 
 ---
 
